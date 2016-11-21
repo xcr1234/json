@@ -1,5 +1,6 @@
 package com.xson;
 
+
 import java.util.List;
 import java.util.Vector;
 
@@ -28,6 +29,15 @@ public class SyncJsonArray extends JsonArray{
     @Override
     protected List<Object> createList(List<Object> list) {
         return new Vector<Object>(list);
+    }
+
+    @Override
+    public List<String> toStringList() {
+        List<String> list = new Vector<String>();
+        for(Object o:this){
+            list.add(String.valueOf(o));
+        }
+        return list;
     }
 }
 

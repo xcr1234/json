@@ -2,7 +2,7 @@ grammar JSON;
 
 /*
 定义JSON的语法结构
-使用antlr的java生成器，生成到com.misaka.xson.parse.json包下。
+使用antlr的java生成器，自动生成lexer和parser的相关代码。
 
 引用：
 《The Definitive ANTLR 4 Reference》第6.2章 《Parse Json》。

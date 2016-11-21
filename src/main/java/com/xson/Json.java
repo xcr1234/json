@@ -33,6 +33,14 @@ import static javafx.scene.input.KeyCode.T;
  */
 public abstract class Json {
 
+    protected Json(){}
+
+    /**
+     * 将Java对象转换为Json字符串。
+     * @param obj java对象
+     * @param feature 转换的配置，具体参考{@link SerializeFeature}
+     * @return 转换成json串的结果
+     */
     @SuppressWarnings("unchecked")
     public static String toJsonString(Object obj, SerializeFeature feature) {
         if (obj == null) {
@@ -91,6 +99,13 @@ public abstract class Json {
         return parseObject(inputStream,null);
     }
 
+    /**
+     * 将json字符串解析为JsonObject，解析失败将抛出JsonParseException
+     * @param inputStream json字符串输入流
+     * @param feature 配置
+     * @return 转换后的JsonObject
+     * @throws IOException
+     */
     public static JsonObject parseObject(InputStream inputStream,DeserializeFeature feature) throws IOException{
         JSONLexer lexer = JsonValueParser.initLexer(inputStream);
         return parseLexer(lexer,feature);
@@ -112,19 +127,44 @@ public abstract class Json {
         return jsonObjectListener.getJsonObject();
     }
 
+    /**
+     * 将json字符串解析为JsonObject，解析失败将抛出JsonParseException
+     * @param jsonString json字符串
+     * @param feature 配置
+     * @return JsonObject
+     */
     public static JsonObject parseObject(String jsonString, DeserializeFeature feature) {
         JSONLexer lexer = JsonValueParser.initLexer(jsonString);
         return parseLexer(lexer,feature);
     }
 
+    /**
+     * 将json字符串解析为JsonArray，解析失败抛出JsonParseException
+     * @param jsonString json字符串
+     * @param feature 配置
+     * @return JsonArray
+     */
     public static JsonArray parseArray(String jsonString, DeserializeFeature feature) {
         return parseArray0( JsonValueParser.initLexer(jsonString),feature);
     }
 
+    /**
+     * 将json字符串解析为JsonArray，解析失败抛出JsonParseException
+     * @param inputStream json字符串输入流
+     * @param feature 配置信息
+     * @return JsonArray
+     * @throws IOException
+     */
     public static JsonArray parseArray(InputStream inputStream, DeserializeFeature feature) throws IOException{
         return parseArray0(JsonValueParser.initLexer(inputStream),feature);
     }
 
+    /**
+     * 将json字符串解析为JsonArray，解析失败抛出JsonParseException
+     * @param inputStream json字符串输入流
+     * @return JsonArray
+     * @throws IOException
+     */
     public static JsonArray parseArray(InputStream inputStream) throws IOException {
         return parseArray(inputStream,null);
     }
@@ -145,14 +185,29 @@ public abstract class Json {
         return jsonArrayListener.getJsonArray();
     }
 
+    /**
+     * 将Java对象转换为Json字符串。
+     * @param obj java对象
+     * @return json字符串
+     */
     public static String toJsonString(Object obj) {
         return toJsonString(obj, null);
     }
 
+    /**
+     * 将json字符串解析为JsonObject，解析失败将抛出JsonParseException
+     * @param jsonString json字符串
+     * @return JsonObject
+     */
     public static JsonObject parseObject(String jsonString) {
         return parseObject(jsonString, null);
     }
 
+    /**
+     * 将json字符串解析为JsonArray，解析失败抛出JsonParseException
+     * @param jsonString json字符串
+     * @return JsonArray
+     */
     public static JsonArray parseArray(String jsonString) {
         return parseArray(jsonString, null);
     }
@@ -170,6 +225,15 @@ public abstract class Json {
 
     }
 
+    /**
+     * 将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param jsonString json字符串
+     * @param type bean对象的Class
+     * @param feature 配置
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     * @throws JsonParseException 解析失败抛出JsonParseException
+     */
     public static <T extends JsonBeanAware> T parseBean(String jsonString,Class<T> type,DeserializeFeature feature){
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
@@ -178,10 +242,29 @@ public abstract class Json {
         return parseBean(jsonObject,type,feature);
     }
 
+    /**
+     * 将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param inputStream json字符串输入流
+     * @param type bean对象的Class
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     * @throws IOException
+     * @throws JsonParseException 解析失败抛出JsonParseException
+     */
     public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,Class<T> type) throws IOException{
         return parseBean(inputStream,type,null);
     }
 
+    /**
+     * 将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param inputStream json字符串输入流
+     * @param type bean对象的Class
+     * @param feature 配置
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     * @throws IOException
+     * @throws JsonParseException 解析失败抛出JsonParseException
+     */
     public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,Class<T> type,DeserializeFeature feature) throws IOException {
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
@@ -190,10 +273,29 @@ public abstract class Json {
         return parseBean(jsonObject,type,feature);
     }
 
+    /**
+     * 将json字符串转换为java Bean对象的ArrayList集合，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param inputStream json字符串输入流
+     * @param type bean对象的Class
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     * @throws IOException
+     * @throws JsonParseException 解析失败抛出JsonParseException
+     */
     public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,Class<T> type) throws IOException{
         return parseBeanList(inputStream,type,null);
     }
 
+    /**
+     * 将json字符串转换为java Bean对象的ArrayList集合，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param inputStream json字符串输入流
+     * @param type bean对象的Class
+     * @param feature 配置
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     * @throws IOException
+     * @throws JsonParseException 解析失败抛出JsonParseException
+     */
     public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,Class<T> type,DeserializeFeature feature) throws IOException{
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
@@ -209,6 +311,14 @@ public abstract class Json {
         return list;
     }
 
+    /**
+     * 将json字符串转换为java Bean对象的ArrayList集合，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param jsonString json字符串
+     * @param type bean对象的Class
+     * @param feature 配置
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     */
     public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,Class<T> type,DeserializeFeature feature){
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
@@ -224,10 +334,24 @@ public abstract class Json {
         return list;
     }
 
+    /**
+     * 将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param jsonString  json字符串
+     * @param type bean对象的Class
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     */
     public static <T extends JsonBeanAware> T parseBean(String jsonString,Class<T> type){
         return parseBean(jsonString,type,null);
     }
 
+    /**
+     * 将json字符串转换为java Bean对象的ArrayList集合，要求bean对象有一个public的无参构造函数且必须实现了JsonBeanAware接口
+     * @param jsonString  json字符串
+     * @param type  bean对象的Class
+     * @param <T> bean对象的java类型
+     * @return 解析后得到的bean对象
+     */
     public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,Class<T> type){
         return parseBeanList(jsonString,type,null);
     }

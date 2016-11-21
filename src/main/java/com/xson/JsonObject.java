@@ -3,6 +3,7 @@ package com.xson;
 
 import com.xson.feature.SerializeFeature;
 import com.xson.util.Args;
+import com.xson.util.Null;
 import com.xson.util.StringUtil;
 
 import java.io.Serializable;
@@ -195,7 +196,7 @@ public class JsonObject extends Json implements Serializable,Iterable<Map.Entry<
         }
     }
 
-    private class SimpleEntry<K,V> implements Map.Entry<K,V>{
+    private static class SimpleEntry<K,V> implements Map.Entry<K,V>{
 
         private final K key;
         private V value;

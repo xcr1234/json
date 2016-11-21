@@ -1,6 +1,7 @@
 package com.xson;
 
 import com.xson.feature.SerializeFeature;
+import com.xson.util.Null;
 
 import java.io.Serializable;
 import java.util.*;
