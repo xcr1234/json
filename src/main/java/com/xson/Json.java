@@ -56,7 +56,12 @@ public abstract class Json {
             JsonObject jsonObject = new JsonObject();
             jsonObjectAware.toJson(jsonObject,feature);
             return jsonObject.toJsonString(feature);
-        } else if (obj instanceof String) {
+        } else if(obj instanceof JsonArrayAware){
+            JsonArrayAware jsonArrayAware = (JsonArrayAware)obj;
+            JsonArray jsonArray = new JsonArray();
+            jsonArrayAware.toJson(jsonArray,feature);
+            return jsonArray.toJsonString(feature);
+        }else if (obj instanceof String) {
             return parseString((String)obj,feature);
         } else if (obj instanceof Date) {
             Date date = (Date) obj;
