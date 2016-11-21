@@ -4,6 +4,16 @@
 
 [下载jar包使用](https://raw.githubusercontent.com/xcr1234/json/master/lib/json.zip)
 
+在Maven中构建
+```xml
+<dependency>
+  <groupId>io.github.xcr1234</groupId>
+  <artifactId>xson</artifactId>
+  <version>1.0</version>
+</dependency>
+```
+
+
 ##主要原理：
 基于antlr框架提供的强大的词法分析和语法分析功能，书写json的文法、Listener监听器；通过antlr执行。  
 整个流程为  

@@ -83,7 +83,10 @@ public class Person implements JsonAware,JsonBeanAware {
         this.name = (String) jsonObject.get("name");
         JsonArray jsonArray = (JsonArray) jsonObject.get("contents");
         if(jsonArray!=null){
-            this.contents = jsonArray.toStringList();
+            this.contents = new ArrayList<String>();
+            for(Object o:jsonArray){
+                this.contents.add(String.valueOf(o));
+            }
         }
     }
 
