@@ -35,20 +35,22 @@ public abstract class Json{
     
     //将json字符串解析为JsonArray，解析失败抛出JsonParseException
     public static JsonArray parseArray(String jsonString, DeserializeFeature feature);
+    
     public static JsonArray parseArray(InputStream inputStream, DeserializeFeature feature) 
             throws IOException;
     
     //将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数
-    public static <T extends JsonBeanAware> T parseBean(String jsonString,Class<T> type
-            ,DeserializeFeature feature);
-    public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,Class<T> type
-            ,DeserializeFeature feature) throws IOException ;
+    public static <T extends JsonBeanAware> T parseBean(String jsonString,
+            Class<T> type,DeserializeFeature feature);
+            
+    public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,
+            Class<T> type,DeserializeFeature feature) throws IOException ;
     
     //将json字符串转换为java Bean对象的集合，要求bean对象有一个public的无参构造函数；返回的是一个ArrayList
-    public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,Class<T> type
-            ,DeserializeFeature feature);
-    public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,Class<T> type
-            ,DeserializeFeature feature) throws IOException;
+    public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,
+            Class<T> type,DeserializeFeature feature);
+    public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,
+            Class<T> type ,DeserializeFeature feature) throws IOException;
     
 }
 ```
