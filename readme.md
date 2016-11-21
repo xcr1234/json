@@ -12,9 +12,16 @@ Walker- >Tree -> JsonObject/JsonArray
 
 ###整个框架的核心是Json类，它主要提供了这几个方法
 
+其中的feature都可以省略例如下面代码都是可以的
+```java
+Json.toJsonString(object)
+Json.toJsonString(object,null)
+```
+
+
 ```java
 public abstract class Json{
-    //feature都是可以省略的
+   
     
     //将Java对象转换为Json字符串。
     public static String toJsonString(Object obj, SerializeFeature feature);
