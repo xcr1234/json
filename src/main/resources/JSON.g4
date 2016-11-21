@@ -50,11 +50,11 @@ value :
 	| NUMBER    #NUMBER
 	| object    #ObjectValue
 	| array     #ArrayValue
-	| 'true'    #BOOLEAN
-	| 'false'   #BOOLEAN
+	| 'true'    #BOOLEANTRUE
+	| 'false'   #BOOLEANFALSE
 	| 'null'    #NULL
 	;
-STRING : '"' (ESC | ~["\\])* '"' ;
+STRING : '"' (ESC | ~["])* '"' ;
 fragment  ESC : '\\' (["\\/bfnrt] | UNICODE);
 fragment UNICODE : 'u' HEX HEX HEX HEX;
 fragment HEX : [0-9a-fA-F];
