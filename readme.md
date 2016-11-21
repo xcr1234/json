@@ -34,7 +34,7 @@ public abstract class Json{
 自己的java Bean对象如果要实现自动转换为json，可以选择实现JsonAware接口或者JsonObjectAware接口；
 如果要能从json字符串中解析，则必须实现JsonBeanAware接口。
 
-更多例子请参考：[例子](src/test)
+更多例子请参考：[例子](src/test/java/com/xson)
 
 
 ---
