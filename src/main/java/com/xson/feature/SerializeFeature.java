@@ -17,7 +17,7 @@ package com.xson.feature;
  *
  * 2.自己定义一个类实现SerializeFeature接口，覆盖DefaultSerializeFeature中的方法：
  *  SerializeFeature serializeFeature = new DefaultSerializeFeature(){
- *      @override
+ *
  *      public boolean unicode() {
  *      return true;
  *      }
