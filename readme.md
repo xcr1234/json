@@ -2,13 +2,16 @@
 
 目前有很多可靠的json库，例如gson、org.json、fastjson；但是还是自己实现了一下一套完整的json流程。（之前也实现过，现在属于重构）  
 
+
+
+
 [下载jar包使用](https://raw.githubusercontent.com/xcr1234/json/master/target/json.jar)
 
 ##主要原理：
-基于antlr框架提供的强大的词法分析和语法分析功能，书写json的文法、Listener监听器；通过antlr执行。
-整个流程为
-String/InputStream -> Lexer -> Parser -> Tree
-Walker- >Tree -> JsonObject/JsonArray
+基于antlr框架提供的强大的词法分析和语法分析功能，书写json的文法、Listener监听器；通过antlr执行。  
+整个流程为  
+String/InputStream -> Lexer -> Parser -> Tree  
+Walker- >Tree -> JsonObject/JsonArray  
 
 ##主要方法：
 
