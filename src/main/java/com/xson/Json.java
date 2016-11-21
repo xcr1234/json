@@ -14,8 +14,12 @@ import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
 import org.antlr.v4.runtime.Recognizer;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static javafx.scene.input.KeyCode.T;
 
 /**
  * <pre>
@@ -83,11 +87,19 @@ public abstract class Json {
         return feature.unicode()?StringUtil.unicodeString(str):StringUtil.jsonString(str);
     }
 
-    public static JsonObject parseObject(String jsonString, DeserializeFeature feature) {
+    public static JsonObject parseObject(InputStream inputStream) throws IOException{
+        return parseObject(inputStream,null);
+    }
+
+    public static JsonObject parseObject(InputStream inputStream,DeserializeFeature feature) throws IOException{
+        JSONLexer lexer = JsonValueParser.initLexer(inputStream);
+        return parseLexer(lexer,feature);
+    }
+
+    private static JsonObject parseLexer(JSONLexer lexer,DeserializeFeature feature){
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
         }
-        JSONLexer lexer = JsonValueParser.initLexer(jsonString);
         JSONParser parser = JsonValueParser.initParser(lexer);
         parser.addErrorListener(new BaseErrorListener(){
             @Override
@@ -100,11 +112,27 @@ public abstract class Json {
         return jsonObjectListener.getJsonObject();
     }
 
+    public static JsonObject parseObject(String jsonString, DeserializeFeature feature) {
+        JSONLexer lexer = JsonValueParser.initLexer(jsonString);
+        return parseLexer(lexer,feature);
+    }
+
     public static JsonArray parseArray(String jsonString, DeserializeFeature feature) {
+        return parseArray0( JsonValueParser.initLexer(jsonString),feature);
+    }
+
+    public static JsonArray parseArray(InputStream inputStream, DeserializeFeature feature) throws IOException{
+        return parseArray0(JsonValueParser.initLexer(inputStream),feature);
+    }
+
+    public static JsonArray parseArray(InputStream inputStream) throws IOException {
+        return parseArray(inputStream,null);
+    }
+
+    private static JsonArray parseArray0(JSONLexer lexer,DeserializeFeature feature){
         if(feature == null){
             feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
         }
-        JSONLexer lexer = JsonValueParser.initLexer(jsonString);
         JSONParser parser = JsonValueParser.initParser(lexer);
         parser.addErrorListener(new BaseErrorListener(){
             @Override
@@ -129,12 +157,8 @@ public abstract class Json {
         return parseArray(jsonString, null);
     }
 
-    public static <T extends JsonBeanAware> T parseBean(String jsonString,Class<T> type,DeserializeFeature feature){
-        if(feature == null){
-            feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
-        }
+    private static <T extends JsonBeanAware> T parseBean(JsonObject jsonObject,Class<T> type,DeserializeFeature feature){
         try {
-            JsonObject jsonObject = parseObject(jsonString,feature);
             T t = type.newInstance();
             t.parse(jsonObject,feature);
             return t;
@@ -143,6 +167,46 @@ public abstract class Json {
         } catch (IllegalAccessException e) {
             throw new JsonParseException(e);
         }
+
+    }
+
+    public static <T extends JsonBeanAware> T parseBean(String jsonString,Class<T> type,DeserializeFeature feature){
+        if(feature == null){
+            feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
+        }
+        JsonObject jsonObject = parseObject(jsonString,feature);
+        return parseBean(jsonObject,type,feature);
+    }
+
+    public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,Class<T> type) throws IOException{
+        return parseBean(inputStream,type,null);
+    }
+
+    public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,Class<T> type,DeserializeFeature feature) throws IOException {
+        if(feature == null){
+            feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
+        }
+        JsonObject jsonObject = parseObject(inputStream,feature);
+        return parseBean(jsonObject,type,feature);
+    }
+
+    public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,Class<T> type) throws IOException{
+        return parseBeanList(inputStream,type,null);
+    }
+
+    public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,Class<T> type,DeserializeFeature feature) throws IOException{
+        if(feature == null){
+            feature = DefaultDeserializeFeature.globalDefaultDeserializeFeature;
+        }
+        JsonArray jsonArray = parseArray(inputStream,feature);
+        List<T> list = new ArrayList<T>();
+        for(int i=0;i<jsonArray.size();i++){
+            if(!(jsonArray.get(i) instanceof JsonObject)){
+                throw new JsonParseException("Array item "+i+" is not a JsonObject!");
+            }
+            list.add(parseBean((JsonObject) jsonArray.get(i),type,feature));
+        }
+        return list;
     }
 
     public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,Class<T> type,DeserializeFeature feature){
@@ -155,15 +219,7 @@ public abstract class Json {
             if(!(jsonArray.get(i) instanceof JsonObject)){
                 throw new JsonParseException("Array item "+i+" is not a JsonObject!");
             }
-            try {
-                T t = type.newInstance();
-                t.parse((JsonObject) jsonArray.get(i),feature);
-                list.add(t);
-            } catch (InstantiationException e) {
-                throw new JsonParseException(e);
-            } catch (IllegalAccessException e) {
-                throw new JsonParseException(e);
-            }
+            list.add(parseBean((JsonObject) jsonArray.get(i),type,feature));
         }
         return list;
     }
