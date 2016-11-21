@@ -57,7 +57,9 @@ public class JsonObjectListener extends JSONBaseListener{
         JSONParser.ValueContext valueContext = ctx.value();
         Object value = property.get(valueContext);
 
-        jsonObject.put(name,value);
+        if(value!=null||feature.readNullValue()){
+            jsonObject.put(name,value);
+        }
     }
 
     @Override
@@ -68,7 +70,7 @@ public class JsonObjectListener extends JSONBaseListener{
     @Override
     public void exitNUMBER(JSONParser.NUMBERContext ctx) {
         String numberString = ctx.NUMBER().getText();
-        property.put(ctx, TypeCaster.toNumber(numberString));
+        property.put(ctx, feature.numberCaster().toNumber(numberString));
     }
 
     @Override
@@ -91,8 +93,6 @@ public class JsonObjectListener extends JSONBaseListener{
         JsonArray jsonArray = jsonArrayParseTreeProperty.get(ctx.array());
         property.put(ctx,jsonArray);
     }
-
-
 
     @Override
     public void exitBOOLEANTRUE(JSONParser.BOOLEANTRUEContext ctx) {

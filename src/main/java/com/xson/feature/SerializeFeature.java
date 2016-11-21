@@ -1,5 +1,7 @@
 package com.xson.feature;
 
+import com.xson.util.NumberCaster;
+
 /**
  * <pre>
  * 序列化json字符串时使用到的配置接口。
@@ -39,4 +41,6 @@ public interface SerializeFeature extends JsonFeature{
     boolean writeCollectionAsJson();
 
     String dateFormat();
+
+
 }
