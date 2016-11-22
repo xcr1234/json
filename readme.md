@@ -22,54 +22,64 @@ Walker- >Tree -> JsonObject/JsonArray
 
 ##主要方法：
 
-###整个框架的核心是Json类，它主要提供了这几个方法
+**xson框架的入口类是com.xson.Json，并提供了两个非常实用的类JsonObject、JsonArray。**
 
-其中的feature都可以省略例如下面代码都是可以的
+序列化：
+
+`String json = Json.toJsonString(object);`
+
+如果一个java bean对象要被json序列化，它必须实现JsonAware、JsonObjectAware、JsonArrayAware接口任意之一，
+JsonObjectAware、JsonArrayAware接口相当于是JsonAware的一个扩展。
+
+
+反序列化：
+如果一个java bean对象要被json库反序列化，那么它应该实现JsonBeanAware接口。
 ```java
-Json.toJsonString(object)
-Json.toJsonString(object,null)
+JsonObject jsonObject = Json.parseObject("...");
+JsonArray jsonArray = Json.parseArray("...");
+
+VO vo = Json.parseBean("...",VO.class);
+List<VO> voList = Json.parseBeanList("...",VO.class);
 ```
 
+## 如何定制序列化
 
+Json类所有的方法后面都支持feature参数，例如
 ```java
-public abstract class Json{
-   
-    
-    //将Java对象转换为Json字符串。
-    public static String toJsonString(Object obj, SerializeFeature feature);
-    
-    //将json字符串解析为JsonObject，解析失败将抛出JsonParseException
-    public static JsonObject parseObject(String jsonString, DeserializeFeature feature);
-    
-    //跟上面的parseObject方法功能一样，不过是提供了流的api
-    public static JsonObject parseObject(InputStream inputStream,DeserializeFeature feature) 
-            throws IOException;
-    
-    //将json字符串解析为JsonArray，解析失败抛出JsonParseException
-    public static JsonArray parseArray(String jsonString, DeserializeFeature feature);
-    
-    public static JsonArray parseArray(InputStream inputStream, DeserializeFeature feature) 
-            throws IOException;
-    
-    //将json字符串转换为java Bean对象，要求bean对象有一个public的无参构造函数
-    public static <T extends JsonBeanAware> T parseBean(String jsonString,
-            Class<T> type,DeserializeFeature feature);
-            
-    public static <T extends JsonBeanAware> T parseBean(InputStream inputStream,
-            Class<T> type,DeserializeFeature feature) throws IOException ;
-    
-    //将json字符串转换为java Bean对象的集合，要求bean对象有一个public的无参构造函数；返回的是一个ArrayList
-    public static <T extends JsonBeanAware> List<T> parseBeanList(String jsonString,
-            Class<T> type,DeserializeFeature feature);
-    public static <T extends JsonBeanAware> List<T> parseBeanList(InputStream inputStream,
-            Class<T> type ,DeserializeFeature feature) throws IOException;
-    
-}
+Json.toJsonString(object,serializeFeature);`
+JsonObject jsonObject = Json.parseObject("...",deSerializeFeature);
 ```
 
+默认的feature实现分别是`DefaultSerializeFeature`和`DefaultDeserializeFeature`，您有两种方式修改序列化/反序列化配置。
 
-自己的java Bean对象如果要实现自动转换为json，可以选择实现JsonAware接口或者JsonObjectAware接口；
-如果要能从json字符串中解析，则必须实现JsonBeanAware接口。
+方式一，调用DefaultSerializeFeature的各种set方法：
+
+```java
+DefaultSerializeFeature serializeFeature = new DefaultSerializeFeature();
+serializeFeature.setWriteCollectionAsJson(false);   //是否将集合类型转为JsonArray输出
+serializeFeaturesetWritesNullValue(true);   //是否输出value为null的key.
+```
+
+方式二：重写DefaultSerializeFeature的接口方法。
+```java
+SerializeFeature serializeFeature = new DefaultSerializeFeature(){
+            @Override
+            public boolean writeCollectionAsJson() {
+                return false;
+            }
+
+            @Override
+            public boolean writesNullValue() {
+                return true;
+            }
+        };
+```
+
+全局默认配置
+
+`DefaultSerializeFeature.globalDefaultFuture`和`DefaultDeserializeFeature.globalDefaultDeserializeFeature`
+
+## 例子
 
 更多例子请参考：[例子](src/test/java/com/xson)
 

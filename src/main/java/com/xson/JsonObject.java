@@ -196,8 +196,9 @@ public class JsonObject extends Json implements Serializable,Iterable<Map.Entry<
         }
     }
 
-    private static class SimpleEntry<K,V> implements Map.Entry<K,V>{
+    private static class SimpleEntry<K,V> implements Map.Entry<K,V>,Serializable{
 
+        private static final long serialVersionUID = -2630259904409855745L;
         private final K key;
         private V value;
 
