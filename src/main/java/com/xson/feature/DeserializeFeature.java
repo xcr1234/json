@@ -1,6 +1,6 @@
 package com.xson.feature;
 
-import com.xson.util.NumberCaster;
+import com.xson.cast.NumberCaster;
 
 /**
  * json反序列化时使用到的接口，使用方法与SerializeFeature类似。

@@ -39,5 +39,12 @@ public class SyncJsonArray extends JsonArray{
         }
         return list;
     }
+
+    @Override
+    public JsonObject toJsonObject() {
+        JsonObject syncJsonObject = new SyncJsonObject();
+        putTo(syncJsonObject);
+        return syncJsonObject;
+    }
 }
 

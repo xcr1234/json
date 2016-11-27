@@ -9,6 +9,8 @@ import com.xson.lexer.JSONParser;
 import com.xson.parser.JsonArrayListener;
 import com.xson.parser.JsonObjectListener;
 import com.xson.parser.JsonValueParser;
+import com.xson.util.DateUtil;
+
 import com.xson.util.StringUtil;
 import org.antlr.v4.runtime.BaseErrorListener;
 import org.antlr.v4.runtime.RecognitionException;
@@ -16,10 +18,8 @@ import org.antlr.v4.runtime.Recognizer;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
-import static javafx.scene.input.KeyCode.T;
 
 /**
  * <pre>
@@ -49,6 +49,10 @@ public abstract class Json {
         if (feature == null) {
             feature = DefaultSerializeFeature.globalDefaultFuture;
         }
+        if(obj.getClass().isArray()){
+            JsonArray jsonArray = new JsonArray(obj);
+            return jsonArray.toJsonString(feature);
+        }
         if (obj instanceof JsonAware) {
             return ((JsonAware) obj).toJsonString(feature);
         }else if(obj instanceof JsonObjectAware) {
@@ -62,21 +66,20 @@ public abstract class Json {
             jsonArrayAware.toJson(jsonArray,feature);
             return jsonArray.toJsonString(feature);
         }else if (obj instanceof String) {
-            return parseString((String)obj,feature);
+            return StringUtil.parseString((String)obj,feature);
         } else if (obj instanceof Date) {
             Date date = (Date) obj;
             if (feature.dateFormat() == null) {
-                return parseString(date.toString(),feature);
+                return StringUtil.parseString(DateUtil.format(date),feature);
             } else {
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat(feature.dateFormat());
-                return parseString(simpleDateFormat.format(date),feature);
+                return StringUtil.parseString(DateUtil.format(date,feature.dateFormat()),feature);
             }
         } else if (obj instanceof List || obj instanceof Set) {
             Collection<Object> collection = (Collection) obj;
             if (feature.writeCollectionAsJson()) {
                 return new JsonArray(collection).toJsonString(feature);
             } else {
-                return parseString(collection.toString(),feature);
+                return StringUtil.parseString(collection.toString(),feature);
             }
         } else if (obj instanceof Map) {
             Map map = (Map) obj;
@@ -88,17 +91,15 @@ public abstract class Json {
                 }
                 return jsonObject.toJsonString(feature);
             } else {
-                return parseString(map.toString(),feature);
+                return StringUtil.parseString(map.toString(),feature);
             }
         } else if (obj instanceof Number || obj instanceof Boolean) {
             return String.valueOf(obj);
         }
-        return parseString(obj.toString(),feature);
+        return StringUtil.parseString(obj.toString(),feature);
     }
 
-    private static String parseString(String str,SerializeFeature feature){
-        return feature.unicode()?StringUtil.unicodeString(str):StringUtil.jsonString(str);
-    }
+
 
     public static JsonObject parseObject(InputStream inputStream) throws IOException{
         return parseObject(inputStream,null);

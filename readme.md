@@ -9,7 +9,7 @@
 <dependency>
   <groupId>io.github.xcr1234</groupId>
   <artifactId>xson</artifactId>
-  <version>1.0</version>
+  <version>1.2</version>
 </dependency>
 ```
 

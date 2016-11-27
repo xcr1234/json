@@ -10,6 +10,7 @@ public class DefaultSerializeFeature implements SerializeFeature{
     private boolean writesNullValue = false;
     private boolean writeCollectionAsJson = true;
     private boolean unicode = false;
+    private boolean base64 = false;
     private String dateFormat;
 
     public DefaultSerializeFeature setWritesNullValue(boolean writesNullValue) {
@@ -47,8 +48,16 @@ public class DefaultSerializeFeature implements SerializeFeature{
         return this;
     }
 
+    public void setBase64(boolean base64) {
+        this.base64 = base64;
+    }
     @Override
     public boolean unicode() {
         return unicode;
+    }
+
+    @Override
+    public boolean base64() {
+        return base64;
     }
 }

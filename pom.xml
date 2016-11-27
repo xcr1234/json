@@ -6,7 +6,7 @@
 
     <groupId>io.github.xcr1234</groupId>
     <artifactId>xson</artifactId>
-    <version>1.0</version>
+    <version>1.2</version>
     <packaging>jar</packaging>
 
     <name>xson</name>
@@ -49,6 +49,7 @@
             <artifactId>antlr4-runtime</artifactId>
             <version>4.5</version>
         </dependency>
+
     </dependencies>
 
     <profiles>
@@ -88,6 +89,7 @@
                             <charset>${encoding}</charset>
                             <encoding>${encoding}</encoding>
                             <docencoding>${encoding}</docencoding>
+                            <additionalparam>-Xdoclint:none</additionalparam>
                         </configuration>
                         <executions>
                             <execution>
@@ -128,7 +130,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-gpg-plugin</artifactId>
-                        <version>1.5</version>
+                        <version>1.6</version>
                         <executions>
                             <execution>
                                 <phase>verify</phase>
@@ -137,6 +139,9 @@
                                 </goals>
                             </execution>
                         </executions>
+                        <configuration>
+                            <executable>C:\Program Files (x86)\GNU\GnuPG\gpg2</executable>
+                        </configuration>
                     </plugin>
 
                 </plugins>
@@ -156,7 +161,6 @@
         </snapshotRepository>
 
     </distributionManagement>
-
 
 
 </project>

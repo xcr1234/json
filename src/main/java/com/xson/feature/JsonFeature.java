@@ -9,4 +9,10 @@ public interface JsonFeature {
      * @return 使用unicode编码后，json name和value都会被转换为unicode字符串格式。
      */
     boolean unicode();
+
+    /**
+     * 字符串使用使用base64编码
+     * @return 使用base64编码后，json name和value都会被转换为base64字符串格式。
+     */
+    boolean base64();
 }

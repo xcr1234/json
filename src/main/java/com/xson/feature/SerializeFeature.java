@@ -1,7 +1,5 @@
 package com.xson.feature;
 
-import com.xson.util.NumberCaster;
-
 /**
  * <pre>
  * 序列化json字符串时使用到的配置接口。
@@ -31,6 +29,7 @@ import com.xson.util.NumberCaster;
 public interface SerializeFeature extends JsonFeature{
     /**
      * 在json输出时是否保留值为null的key.
+     * @return boolean
      */
     boolean writesNullValue();
 

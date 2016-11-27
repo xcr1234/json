@@ -2,29 +2,43 @@ package com.xson.util;
 
 
 import com.xson.feature.DeserializeFeature;
+import com.xson.feature.SerializeFeature;
+import com.xson.util.base64.Base64;
 
 public class StringUtil {
-    public static String quoteString(String str){
+    private static String quoteString(String str){
         return "\""+str+"\"";
     }
 
-    public static String replaceQuote(String str){
+    private static String replaceQuote(String str){
         return str.replace("\"","\\\"");
     }
 
-    public static String jsonString(String str){
+    private static String jsonString(String str){
         return quoteString(replaceQuote(str));
     }
 
-    public static String unicodeString(String str){
+    private static String unicodeString(String str){
         return quoteString(Unicode.string2Unicode(str));
     }
 
     public static String parseJson(String str, DeserializeFeature feature){
         if(feature.unicode()){
             return Unicode.unicode2String(removeQuote(str));
-        }else{
+        }else if(feature.base64()){
+            return Base64.decode(removeQuote(str));
+        } else{
             return removeQuote(str).replace("\\","\"");
+        }
+    }
+
+    public static String parseString(String str,SerializeFeature feature){
+        if(feature.unicode()){
+            return StringUtil.unicodeString(str);
+        }else if(feature.base64()){
+            return quoteString(Base64.encode(str));
+        } else {
+            return StringUtil.jsonString(str);
         }
     }
 

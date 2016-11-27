@@ -1,6 +1,7 @@
 package com.xson;
 
 
+import com.xson.feature.DefaultDeserializeFeature;
 import com.xson.feature.DefaultSerializeFeature;
 import com.xson.util.Unicode;
 import org.junit.Assert;
@@ -56,5 +57,42 @@ public class TestObject {
 
         Assert.assertEquals(jo.toString(),jsonObject.toJsonString(feature));
 
+    }
+    @Test
+    public void testForEach(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("a",100);
+        jsonObject.put("b","abc");
+        jsonObject.put("hello","你好");
+        jsonObject.foreach(new JsonObject.ForeachHelper() {
+            @Override
+            protected void foreach(int index, String name, Object value) {
+                System.out.println(name+"="+value);
+                if("b".equals(name)){
+                    BREAK();
+                }
+            }
+        });
+    }
+    @Test
+    public void testB64(){
+        JsonObject jsonObject = new JsonObject();
+        jsonObject.put("a",100);
+        jsonObject.put("b","abc");
+        jsonObject.put("hello","你好");
+        String str ;
+        System.out.println(str = Json.toJsonString(jsonObject,new DefaultSerializeFeature(){
+            @Override
+            public boolean base64() {
+                return true;
+            }
+        }));
+        JsonObject o = Json.parseObject(str,new DefaultDeserializeFeature(){
+            @Override
+            public boolean base64() {
+                return true;
+            }
+        });
+        Assert.assertEquals(jsonObject,o);
     }
 }

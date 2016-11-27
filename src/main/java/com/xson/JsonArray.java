@@ -1,9 +1,15 @@
 package com.xson;
 
+import com.xson.cast.TypeUtils;
 import com.xson.feature.SerializeFeature;
+import com.xson.util.Args;
 import com.xson.util.Null;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.util.*;
 
 /**
@@ -33,6 +39,12 @@ public class JsonArray extends Json implements Serializable,Iterable<Object>,Jso
     public JsonArray(Collection<Object> collection){
         this.list = createList();
         this.list.addAll(collection);
+    }
+
+    JsonArray(Object array){
+        for(int i=0;i< Array.getLength(array);i++){
+            this.list.add(Array.get(array,i));
+        }
     }
 
 
@@ -152,8 +164,124 @@ public class JsonArray extends Json implements Serializable,Iterable<Object>,Jso
         return stringBuilder.toString();
     }
 
+    public String getString(int index) {
+        Object value = get(index);
+        return TypeUtils.castToString(value);
+    }
+
+    public Byte getByte(int index) {
+        Object value = get(index);
+        return TypeUtils.castToByte(value);
+    }
+
+    public Character getChar(int index) {
+        Object value = get(index);
+        return TypeUtils.castToChar(value);
+    }
+
+    public Short getShort(int index) {
+        Object value = get(index);
+        return TypeUtils.castToShort(value);
+    }
+
+    public BigDecimal getBigDecimal(int index) {
+        Object value = get(index);
+        return TypeUtils.castToBigDecimal(value);
+    }
+
+    public BigInteger getBigInteger(int index) {
+        Object value = get(index);
+        return TypeUtils.castToBigInteger(value);
+    }
+
+    public Float getFloat(int index) {
+        Object value = get(index);
+        return TypeUtils.castToFloat(value);
+    }
+
+    public Double getDouble(int index) {
+        Object value = get(index);
+        return TypeUtils.castToDouble(value);
+    }
+
+    public Date getDate(int index) {
+        Object value = get(index);
+        return TypeUtils.castToDate(value);
+    }
+
+    public java.sql.Date getSqlDate(int index) {
+        Object value = get(index);
+        return TypeUtils.castToSqlDate(value);
+    }
+
+    public Timestamp getTimestamp(int index) {
+        Object value = get(index);
+        return TypeUtils.castToTimestamp(value);
+    }
+
+    public Long getLong(int index) {
+        Object value = get(index);
+        return TypeUtils.castToLong(value);
+    }
+
+    public Integer getInt(int index) {
+        Object value = get(index);
+        return TypeUtils.castToInt(value);
+    }
+
+    public byte[] getBytes(int index) {
+        Object value = get(index);
+        return TypeUtils.castToBytes(value);
+    }
+
+    public Boolean getBoolean(int index) {
+        Object value = get(index);
+        return TypeUtils.castToBoolean(value);
+    }
+
+    public JsonObject getJsonObject(int index) {
+        Object value = get(index);
+        return TypeUtils.castToJsonObject(value);
+    }
+
+    public JsonArray getJsonArray(int index) {
+        Object value = get(index);
+        return TypeUtils.castToJsonArray(value);
+    }
+
+    public String getJson(int index){
+        Object value = get(index);
+        return Json.toJsonString(value);
+    }
+
+    public JsonObject toJsonObject(){
+        JsonObject jsonObject = new JsonObject();
+        putTo(jsonObject);
+        return jsonObject;
+    }
+
+    protected void putTo(JsonObject jsonObject){
+        for(int i=0;i<this.size();i++){
+            Object value = this.get(i);
+            jsonObject.put(String.valueOf(i),value);
+        }
+    }
+
     public void sort(Comparator<Object> comparator){
         Collections.sort(list,comparator);
+    }
+
+    public void foreach(ForeachHelper foreachHelper){
+        Args.notNull(foreachHelper,"foreach helper");
+        int i = 0;
+        for(Object o:this.list){
+            if(foreachHelper.flag){
+                foreachHelper.foreach(i,o instanceof Null?null:o);
+            }else{
+                break;
+            }
+            i++;
+        }
     }
 
 
@@ -179,6 +307,15 @@ public class JsonArray extends Json implements Serializable,Iterable<Object>,Jso
         //@Override
         public void remove() {
             innerIterator.remove();
+        }
+    }
+
+
+    public static abstract class ForeachHelper{
+        boolean flag = true;
+        protected abstract void foreach(int index,Object value);
+        public final void BREAK() {
+            flag = false;
         }
     }
 

@@ -5,10 +5,10 @@ import com.xson.JsonArray;
 import com.xson.JsonObject;
 import com.xson.JsonParseException;
 import com.xson.feature.DeserializeFeature;
+import com.xson.feature.SerializeFeature;
 import com.xson.lexer.JSONBaseListener;
 import com.xson.lexer.JSONParser;
 import com.xson.util.StringUtil;
-import com.xson.util.TypeCaster;
 import org.antlr.v4.runtime.tree.ParseTreeProperty;
 
 import java.util.List;
@@ -61,6 +61,8 @@ public class JsonObjectListener extends JSONBaseListener{
             jsonObject.put(name,value);
         }
     }
+
+
 
     @Override
     public void exitString(JSONParser.StringContext ctx) {
