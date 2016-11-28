@@ -64,7 +64,7 @@ int num = jsonObject.getInt("str"); //自动转换为数字100.
 
 ## Java Bean对象的例子
 ```java
-class Bean implents JsonObjectAware,JsonBeanAware{
+class Bean implements JsonObjectAware,JsonBeanAware{
 	private int id;
 	private String name;
 	
