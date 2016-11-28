@@ -138,7 +138,7 @@ JsonObject默认使用`LinkedHashMap`来保证json key的顺序，如果对顺�
 public class MyJsonObject extends JsonObject {
 	@override
 	protected Map<String, Object> createMap(){
-		return new HashMap<String, Object>;
+		return new HashMap<String, Object>();
 	}
 	@override
 	protected Map<String, Object> createMap(Map<String, Object> map){
