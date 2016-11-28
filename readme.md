@@ -127,6 +127,30 @@ SerializeFeature serializeFeature = new DefaultSerializeFeature(){
 
 `DefaultSerializeFeature.globalDefaultFuture`和`DefaultDeserializeFeature.globalDefaultDeserializeFeature`
 
+## 实现自己的JsonObject
+
+JsonObject默认使用`LinkedHashMap`来保证json key的顺序，如果对顺序没有强制的要求，这样，我们可以使用`HashMap`来提高性能。  
+你也可以自己提供其他的Map实现。
+
+方式是继承`JsonObject`类，覆盖`protected Map<String, Object> createMap()`和`protected Map<String, Object> createMap(Map<String, Object> map)`方法。
+
+```java
+public class MyJsonObject extends JsonObject {
+	@override
+	protected Map<String, Object> createMap(){
+		return new HashMap<String, Object>;
+	}
+	@override
+	protected Map<String, Object> createMap(Map<String, Object> map){
+		return new HashMap<String, Object>(map);
+	}
+}
+JsonObject jsonObject = new MyJsonObject();
+```
+
+同样地，`JsonArray`类也支持类似的实现。
+
+
 ## 例子
 
 更多例子请参考：[例子](src/test/java/com/xson)
