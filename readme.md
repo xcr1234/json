@@ -20,6 +20,9 @@
 String/InputStream -> Lexer -> Parser -> Tree  
 Walker- >Tree -> JsonObject/JsonArray  
 
+`JsonObject`的底层其实就是一个`Map<String,Object>`（默认实现为`LinkedHashMap`）；  
+而`JsonArray`的底层就是一个`List<Object>`（默认为`ArrayList<Object>`）。  
+
 ##主要方法：
 
 **xson框架的入口类是com.xson.Json，并提供了两个非常实用的类JsonObject、JsonArray。**
@@ -41,6 +44,25 @@ JsonArray jsonArray = Json.parseArray("...");
 VO vo = Json.parseBean("...",VO.class);
 List<VO> voList = Json.parseBeanList("...",VO.class);
 ```
+
+## JsonObject/JsonArray的类型转化
+
+`JsonObject`和`JsonArray`类的getXXX方法支持自动类型转换，例如put时的value类型是int，在调用getString方法时会自动将int转换为String。
+
+例子：
+
+```java
+jsonObject.put("num",100);
+String str = jsonObject.getString("num"); //自动将int转换为String，结果为"100"
+String str2 = (String)jsonObject.get("num");  //强制转换失败，抛出ClassCastException
+
+jsonObject.put("str","100");
+int num = jsonObject.getInt("str"); //自动转换为数字100.
+```
+
+如果自动转换也失败了，则会抛出`JsonCastException`。
+
+
 
 ## 如何定制序列化
 
