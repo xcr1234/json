@@ -62,6 +62,32 @@ int num = jsonObject.getInt("str"); //自动转换为数字100.
 
 如果自动转换也失败了，则会抛出`JsonCastException`。
 
+## Java Bean对象的例子
+```java
+class Bean implents JsonObjectAware,JsonBeanAware{
+	private int id;
+	private String name;
+	
+	// ...
+	// 省略get set 方法
+	
+	@Override
+    public void toJson(JsonObject jsonObject, SerializeFeature feature) {
+		//将bean对象的所有属性注入到JsonObject当中。
+		jsonObject.put("id",id");
+		jsonObject.put("name",name);
+	}
+	
+	@Override
+    public void parse(JsonObject jsonObject, DeserializeFeature feature) {
+		//从JsonObject中读取出这个类的所有属性。
+		this.id = jsonObject.getInt("id");
+		this.name = jsonObject.getString("name");
+	}
+	
+}
+
+```
 
 
 ## 如何定制序列化
