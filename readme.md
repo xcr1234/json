@@ -2,7 +2,7 @@
 
 目前有很多可靠的json库，例如gson、org.json、fastjson；但是还是自己实现了一下一套完整的json流程。（之前也实现过，现在属于重构）  
 
-[下载jar包使用](https://raw.githubusercontent.com/xcr1234/json/master/lib/json.zip)
+[下载：xson1.2.zip](https://raw.githubusercontent.com/xcr1234/json/master/xson1.2.zip)
 
 在Maven中构建
 ```xml
