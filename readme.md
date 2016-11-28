@@ -74,7 +74,7 @@ class Bean implements JsonObjectAware,JsonBeanAware{
 	@Override
     public void toJson(JsonObject jsonObject, SerializeFeature feature) {
 		//将bean对象的所有属性注入到JsonObject当中。
-		jsonObject.put("id",id");
+		jsonObject.put("id",id);
 		jsonObject.put("name",name);
 	}
 	
