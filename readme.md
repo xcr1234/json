@@ -14,7 +14,7 @@
 ```
 
 **TODO:**  
-期望做一个Json Path的功能，奈何能力有限！各位大神欢迎fork我的代码，为xoson添砖加瓦吧！
+期望做一个Json Path的功能，奈何能力有限！各位大神欢迎fork我的代码，为xson添砖加瓦吧！
 
 
 ##主要原理：
@@ -94,6 +94,8 @@ class Bean implements JsonObjectAware,JsonBeanAware{
 
 
 ## 如何定制序列化
+
+**XSON库默认不输出value=null的key,如果需要输出的话，需要设置`writesNullValue`为true**
 
 Json类所有的方法后面都支持feature参数，例如
 ```java
